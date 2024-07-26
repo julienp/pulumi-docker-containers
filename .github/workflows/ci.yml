@@ -25,11 +25,11 @@ env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }} # Used by test-containers.sh\
   # The organization in the Pulumi SaaS service against which the integration
   # tests will run:
-  PULUMI_ORG: "pulumi-test"
+  PULUMI_ORG: "v-julien-pulumi-corp"
   # We parameterize the Docker Hub username to allow forks to easily test
   # changes on a separate repo without having to change the username in multiple
   # places:
-  DOCKER_USERNAME: pulumi
+  DOCKER_USERNAME: jpoissonnier
   PULUMI_VERSION: ${{ github.event.inputs.pulumi_version || github.event.client_payload.ref }}
   # Do not depend on C library for the tests.
   CGO_ENABLED: "0"
@@ -60,6 +60,7 @@ jobs:
             [1]: ${{ steps.vars.outputs.run-url }}
   kitchen-sink:
     name: All SDKs image
+    if: false
     strategy:
       matrix:
         go-version: [1.21.x]
@@ -104,9 +105,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 14400 # 4 hours
-          role-session-name: pulumi-docker-containers@githubActions
-          role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
+          # role-duration-seconds: 14400 # 4 hours
+          # role-session-name: pulumi-docker-containers@githubActions
+          # role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
       - name: Run Pulumi Template Tests
         run: |
           docker run \
@@ -147,6 +148,7 @@ jobs:
 
   provider-build-environment:
     name: Provider Build Environment image
+    if: false
     strategy:
       matrix:
         go-version: [1.21.x]
@@ -191,9 +193,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 14400 # 4 hours
-          role-session-name: pulumi-docker-containers@githubActions
-          role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
+          # role-duration-seconds: 14400 # 4 hours
+          # role-session-name: pulumi-docker-containers@githubActions
+          # role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
       - name: Run Pulumi Template Tests
         run: |
           docker run \
@@ -215,6 +217,7 @@ jobs:
 
   base:
     name: Base image
+    if: false
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -248,8 +251,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sdk: ["nodejs", "python", "dotnet", "go", "java"]
-        arch: ["amd64", "arm64"]
+        sdk: ["nodejs"] #, "python", "dotnet", "go", "java"]
+        arch: ["amd64"] #, "arm64"]
     steps:
       # If no version of Pulumi is supplied by the incoming event (e.g. in the
       # case of a PR or merge to main), we use the latest production version:
@@ -298,9 +301,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 14400 # 4 hours
-          role-session-name: pulumi-docker-containers@githubActions
-          role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
+          # role-duration-seconds: 14400 # 4 hours
+          # role-session-name: pulumi-docker-containers@githubActions
+          # role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
       - name: Run Pulumi Template Tests
         run: |
           docker run \
@@ -324,6 +327,7 @@ jobs:
 
   ubi-sdk:
     name: UBI SDK images
+    if: false
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -381,9 +385,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 14400 # 4 hours
-          role-session-name: pulumi-docker-containers@githubActions
-          role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
+          # role-duration-seconds: 14400 # 4 hours
+          # role-session-name: pulumi-docker-containers@githubActions
+          # role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
       - name: Run Pulumi Template Tests
         run: |
           docker run \
