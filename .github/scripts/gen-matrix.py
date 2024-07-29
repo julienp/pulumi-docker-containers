@@ -6,17 +6,17 @@
 #     "include": [
 #         {"sdk": "go",     "arch": "amd64", "language_version": "1.21.1", "default": True},
 #         {"sdk": "go",     "arch": "ard64", "language_version": "1.21.1", "default": True},
-#         {"sdk": "python", "arch": "amd64", "language_version": "3.9",    "default": True, "suffix": "-3.9"},
-#         {"sdk": "python", "arch": "arm64", "language_version": "3.9",    "default": True, "suffix": "-3.9"},
-#         {"sdk": "python", "arch": "amd64", "language_version": "3.10",                    "suffix": "-3.10"},
-#         {"sdk": "python", "arch": "arm64", "language_version": "3.10",                    "suffix": "-3.10"},
+#         {"sdk": "python", "arch": "amd64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
+#         {"sdk": "python", "arch": "arm64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
+#         {"sdk": "python", "arch": "amd64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
+#         {"sdk": "python", "arch": "arm64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
 #         ...
 #     ]
 # }
 #
-# `suffix` is an optional suffix to append to the image name, for example `-3.9` to build `pulumi-python-3.9`
+# `suffix` is an optional suffix to append to the image name, for example `-3.9` to generate `pulumi-python-3.9`.
 # `default` indicates that this is the default language_version, and we will push two tags for the image, once
-# with and once without the suffix.
+# with and once without the suffix in the name, for example `pulumi-python-3.9` and `pulumi-python`.
 #
 import json
 
@@ -29,8 +29,8 @@ sdks = {
     # "dotnet": "6.0",
     # "java": "not-versioned",
 }
-python_versions = ["3.9", "3.10"]  # , "3.11", "3.12"]
-node_versions = ["18", "20", "22"]
+python_additional_versions = ["3.10" , "3.11"] #, "3.12"]
+node_additional_versions = ["18", "20", "22"]
 
 # Unversioned SDKs, this includes an unversioned variant for Python and Nodejs
 for (sdk, language_version) in sdks.items():
@@ -44,8 +44,7 @@ for (sdk, language_version) in sdks.items():
             }
         )
 
-# Add suffixed variants for Python
-for version in python_versions:
+for version in python_additional_versions:
     for arch in archs:
         matrix["include"].append(
             {
@@ -53,17 +52,18 @@ for version in python_versions:
                 "arch": arch,
                 "language_version": version,
                 "suffix": f"-{version}",
+                "default": False,
             }
         )
 
-# Add suffixed variants for Nodejs
-# for version in node_versions:
+# for version in node_additional_versions:
 #     for arch in archs:
 #         matrix["include"].append({
 #             "sdk": "nodejs",
 #             "arch": arch,
 #             "language_version": version,
 #             "suffix": f"-{version}",
+#             "default": False,
 #         })
 
 print(f"matrix={json.dumps(matrix)}")

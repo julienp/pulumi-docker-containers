@@ -360,7 +360,6 @@ jobs:
             --entrypoint /src/pulumi-test-containers \
             --platform ${{ matrix.arch }} \
             ${{ env.IMAGE_NAME }} \
-            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}:${{ env.PULUMI_VERSION }}-debian-${{ matrix.arch }} \
             -test.parallel=1 -test.timeout=1h -test.v -test.run "TestPulumiTemplateTests|TestEnvironment"
       - name: Push image
         run: |
