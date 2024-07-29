@@ -31,12 +31,12 @@ env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
   # The organization in the Pulumi SaaS service against which the integration
   # tests will run:
-  PULUMI_ORG: "pulumi-test"
+  PULUMI_ORG: "v-julien-pulumi-corp"
   # We parameterize the Docker Hub username to allow forks to easily test
   # changes on a separate repo without having to change the username in multiple
   # places:
-  DOCKER_USERNAME: pulumibot
-  DOCKER_ORG: pulumi
+  DOCKER_USERNAME: jpoissonnier
+  DOCKER_ORG: jpoissonnier
   PULUMI_VERSION: ${{ github.event.inputs.pulumi_version || github.event.client_payload.ref }}
   # Do not depend on C library for the tests.
   CGO_ENABLED: "0"
@@ -338,9 +338,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 14400 # 4 hours
-          role-session-name: pulumi-docker-containers@githubActions
-          role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
+          # role-duration-seconds: 14400 # 4 hours
+          # role-session-name: pulumi-docker-containers@githubActions
+          # role-to-assume: ${{ secrets.AWS_CI_ROLE_ARN }}
       - name: Tests
         run: |
           docker run \
