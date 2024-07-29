@@ -5,7 +5,7 @@
 # matrix = {
 #     "include": [
 #         {"sdk": "go",     "arch": "amd64", "language_version": "1.21.1", "default": True   "suffix": "-1.21.1"},
-#         {"sdk": "go",     "arch": "ard64", "language_version": "1.21.1", "default": True   "suffix": "-1.21.1"},
+#         {"sdk": "go",     "arch": "arm64", "language_version": "1.21.1", "default": True   "suffix": "-1.21.1"},
 #         {"sdk": "python", "arch": "amd64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
 #         {"sdk": "python", "arch": "arm64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
 #         {"sdk": "python", "arch": "amd64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
@@ -26,17 +26,18 @@ import sys
 
 INCLUDE_ARCH = False if len(sys.argv) > 1 and sys.argv[1] == "--no-arch" else True
 
-matrix = {"include": []}
-archs = ["amd64", "arm64"] if INCLUDE_ARCH else [None]
+# SDKs and their default versions
 sdks = {
     "python": "3.9",
-    # "nodejs": "18",
-    # "go": "1.21.1",
-    # "dotnet": "6.0",
-    # "java": "not-versioned",
+    "nodejs": "18",          # Version is not passed through as build arg yet
+    "go": "1.21.1",          # Version is not passed through as build arg yet
+    "dotnet": "6.0",         # Version is not passed through as build arg yet
+    "java": "not-versioned", # Version is not passed through as build arg yet
 }
-python_additional_versions = ["3.10" , "3.11"] #, "3.12"]
-node_additional_versions = ["18", "20", "22"]
+# Additional versions of Python to build
+python_additional_versions = ["3.10" , "3.11", "3.12"]
+archs = ["amd64", "arm64"] if INCLUDE_ARCH else [None]
+matrix = {"include": []}
 
 def make_entry(sdk, arch, language_version, default):
     entry = {
@@ -56,15 +57,5 @@ for (sdk, language_version) in sdks.items():
 for version in python_additional_versions:
     for arch in archs:
         matrix["include"].append(make_entry("python", arch, version, False))
-
-# for version in node_additional_versions:
-#     for arch in archs:
-#         matrix["include"].append({
-#             "sdk": "nodejs",
-#             "arch": arch,
-#             "language_version": version,
-#             "suffix": f"-{version}",
-#             "default": False,
-#         })
 
 print(f"matrix={json.dumps(matrix)}")
