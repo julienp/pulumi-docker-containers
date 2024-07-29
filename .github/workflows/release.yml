@@ -386,7 +386,7 @@ jobs:
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-amd64
           docker manifest push ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian
       - name: Debian manifest without language version suffix
-        if: ${{ (matrix.default == true) && (matrix.suffix != "") }}
+        if: ${{ (matrix.default == true) && (matrix.suffix != '') }}
         run: |
           docker manifest create \
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian \
