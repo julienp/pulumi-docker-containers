@@ -24,10 +24,10 @@ matrix = {"include": []}
 archs = ["amd64"] #, "arm64"]
 sdks = {
     "python": "3.9",
-    "nodejs": "18",
-    "go": "1.21.1",
-    "dotnet": "6.0",
-    "java": "not-versioned",
+    # "nodejs": "18",
+    # "go": "1.21.1",
+    # "dotnet": "6.0",
+    # "java": "not-versioned",
 }
 python_versions = ["3.9", "3.10"]  # , "3.11", "3.12"]
 node_versions = ["18", "20", "22"]
