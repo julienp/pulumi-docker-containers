@@ -366,7 +366,7 @@ jobs:
           docker push ${{ env.IMAGE_NAME }}
   debian-sdk-manifests:
     name: Debian SDK manifests
-    needs: ["debian-sdk"]
+    needs: ["debian-sdk", "define-matrix"]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

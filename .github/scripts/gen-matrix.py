@@ -4,8 +4,8 @@
 #
 # matrix = {
 #     "include": [
-#         {"sdk": "go",     "arch": "amd64", "language_version": "1.21.1", "default": True},
-#         {"sdk": "go",     "arch": "ard64", "language_version": "1.21.1", "default": True},
+#         {"sdk": "go",     "arch": "amd64", "language_version": "1.21.1", "default": True   "suffix": "-1.21.1"},
+#         {"sdk": "go",     "arch": "ard64", "language_version": "1.21.1", "default": True   "suffix": "-1.21.1"},
 #         {"sdk": "python", "arch": "amd64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
 #         {"sdk": "python", "arch": "arm64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
 #         {"sdk": "python", "arch": "amd64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
@@ -32,7 +32,6 @@ sdks = {
 python_additional_versions = ["3.10" , "3.11"] #, "3.12"]
 node_additional_versions = ["18", "20", "22"]
 
-# Unversioned SDKs, this includes an unversioned variant for Python and Nodejs
 for (sdk, language_version) in sdks.items():
     for arch in archs:
         matrix["include"].append(
@@ -40,6 +39,7 @@ for (sdk, language_version) in sdks.items():
                 "sdk": sdk,
                 "arch": arch,
                 "language_version": language_version,
+                "suffix": f"-{language_version}",
                 "default": True,
             }
         )
