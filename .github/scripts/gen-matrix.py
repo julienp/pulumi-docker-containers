@@ -47,9 +47,8 @@ def make_entry(*, sdk, arch, default, language_version, suffix=None):
     entry = {
         "sdk": sdk,
         "default": default,
+        "language_version": language_version,
     }
-    if language_version is not None:
-        entry["language_version"] = language_version
     if arch is not None:
         entry["arch"] = arch
     if suffix is not None:
