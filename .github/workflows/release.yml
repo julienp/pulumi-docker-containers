@@ -284,12 +284,11 @@ jobs:
 
   debian-sdk:
     name: Debian SDK images
+    needs: define-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        sdk: ["nodejs", "python", "dotnet", "go", "java"]
-        arch: ["amd64", "arm64"]
+      matrix: ${{ fromJSON(needs.define-matrix.outputs.matrix) }}
     steps:
       - uses: actions/checkout@master
       - name: Set image name
@@ -377,8 +376,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        sdk: ["nodejs", "python", "dotnet", "go", "java"]
+      matrix: ${{ fromJSON(needs.define-matrix.outputs.matrix) }}
     steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v1
