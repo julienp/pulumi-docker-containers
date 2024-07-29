@@ -410,18 +410,35 @@ jobs:
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-arm64 \
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-amd64
           docker manifest push ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}
-      # TODO: Manifest without debian suffix, without language version suffix
+      - name: Manifest without debian suffix, without language version suffix
+        if: ${{ (matrix.default == true) && (matrix.suffix != '') }}
+        run: |
+          docker manifest create \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}$:${{ env.PULUMI_VERSION }} \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-arm64 \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-amd64
+          docker manifest push ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}:${{ env.PULUMI_VERSION }}
       - name: Latest manifest
         # Manifest lists can't be a source for `docker tag`, so we create an
         # additional copy of the previous manifest to tag latest:
-        if: ${{ github.event.inputs.tag_latest || github.event_name == 'repository_dispatch' }}
+        if: ${{ (github.event.inputs.tag_latest || github.event_name == 'repository_dispatch') && (matrix.default == true) && (matrix.suffix != '')}}
         run: |
           docker manifest create \
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:latest \
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-arm64 \
             ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-amd64
           docker manifest push ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:latest
-      # TODO: Latest manifest, without language version suffix
+      - name: Latest manifest, without language version suffix
+        # Manifest lists can't be a source for `docker tag`, so we create an
+        # additional copy of the previous manifest to tag latest:
+        if: ${{ (github.event.inputs.tag_latest || github.event_name == 'repository_dispatch') && (matrix.default == true) && (matrix.suffix != '') }}
+        run: |
+          docker manifest create \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}:latest \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-arm64 \
+            ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}${{ matrix.suffix }}:${{ env.PULUMI_VERSION }}-debian-amd64
+          docker manifest push ${{ env.DOCKER_ORG }}/pulumi-${{ matrix.sdk }}:latest
+
 
   # ubi-sdk:
   #   name: UBI SDK images
