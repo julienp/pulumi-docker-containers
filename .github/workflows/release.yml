@@ -317,7 +317,7 @@ jobs:
             --platform linux/${{ matrix.arch }} \
             -t ${{ env.IMAGE_NAME }} \
             --build-arg PULUMI_VERSION=${{ env.PULUMI_VERSION }} \
-            --build-arg LANGUAGE_VERSION=${{ env.LANGUAGE_VERSION }} \
+            --build-arg LANGUAGE_VERSION=${{ matrix.language_version }} \
             docker/${{ matrix.sdk }} \
             --load
       - name: Install go
