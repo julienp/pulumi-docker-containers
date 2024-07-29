@@ -59,7 +59,7 @@ def make_entry(*, sdk, arch, default, language_version, suffix=None):
 
 for arch in archs:
 
-    for sdk, version in sdks:
+    for sdk, version in sdks.items():
         matrix["include"].append(
             make_entry(sdk=sdk, arch=arch, default=True, language_version=version)
         )
