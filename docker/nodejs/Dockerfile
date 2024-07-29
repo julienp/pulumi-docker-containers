@@ -15,7 +15,8 @@ RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version $PULUMI_VERSION
 
 
 # The runtime container
-FROM node:18-bullseye-slim
+ARG LANGUAGE_VERSION=18
+FROM node:${LANGUAGE_VERSION}-bullseye-slim
 LABEL org.opencontainers.image.description="Pulumi CLI container for nodejs"
 WORKDIR /pulumi/projects
 

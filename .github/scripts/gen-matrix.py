@@ -4,12 +4,12 @@
 #
 # matrix = {
 #     "include": [
-#         {"sdk": "go",     "arch": "amd64",                             "default": True},
-#         {"sdk": "go",     "arch": "arm64",                             "default": True},
-#         {"sdk": "python", "arch": "amd64", "language_version": "3.9",  "default": True,  "suffix": "-3.9"},
-#         {"sdk": "python", "arch": "arm64", "language_version": "3.9",  "default": True,  "suffix": "-3.9"},
-#         {"sdk": "python", "arch": "amd64", "language_version": "3.10", "default": False, "suffix": "-3.10"},
-#         {"sdk": "python", "arch": "arm64", "language_version": "3.10", "default": False, "suffix": "-3.10"},
+#         {"sdk": "go",     "arch": "amd64", "language_version": "1.21.1", "default": True},
+#         {"sdk": "go",     "arch": "arm64", "language_version": "1.21.1", "default": True},
+#         {"sdk": "python", "arch": "amd64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
+#         {"sdk": "python", "arch": "arm64", "language_version": "3.9",    "default": True,  "suffix": "-3.9"},
+#         {"sdk": "python", "arch": "amd64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
+#         {"sdk": "python", "arch": "arm64", "language_version": "3.10",   "default": False, "suffix": "-3.10"},
 #         ...
 #     ]
 # }
@@ -31,13 +31,19 @@ archs = ["amd64", "arm64"] if INCLUDE_ARCH else [None]
 matrix = {"include": []}
 
 # SDKs without version suffixes
-sdks = ["nodejs", "go", "dotnet", "java"]
+# sdks = ["nodejs", "go", "dotnet", "java"]
+sdks = {
+    "nodejs": "18",
+    "go": "1.21.1",
+    "dotnet": "6.0",
+    "java": "not-used-yet",
+}
 # Python versions
 python_default_version = "3.9"
 python_additional_versions = ["3.10", "3.11", "3.12"]
 
 
-def make_entry(*, sdk, arch, default, language_version=None, suffix=None):
+def make_entry(*, sdk, arch, default, language_version, suffix=None):
     entry = {
         "sdk": sdk,
         "default": default,
@@ -53,8 +59,10 @@ def make_entry(*, sdk, arch, default, language_version=None, suffix=None):
 
 for arch in archs:
 
-    for sdk in sdks:
-        matrix["include"].append(make_entry(sdk=sdk, arch=arch, default=True))
+    for sdk, version in sdks:
+        matrix["include"].append(
+            make_entry(sdk=sdk, arch=arch, default=True, language_version=version)
+        )
 
     # Default Python version
     matrix["include"].append(
